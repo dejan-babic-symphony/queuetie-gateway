@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from './../src/app.module';
+import { AppModule } from '../src/app.module';
 
-describe('AppController (e2e)', () => {
+describe('HealthController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
@@ -15,12 +15,17 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  describe('GET /', () => {
-    it('should render the landing page', () => {
+  describe('GET /health', () => {
+    it('should provide the application status', () => {
       return request(app.getHttpServer())
-        .get('/')
+        .get('/health')
         .expect(200)
-        .expect('Queuetie Gateway');
+        .expect({
+          status: 'ok',
+          info: { gateway: { status: 'up' } },
+          error: {},
+          details: { gateway: { status: 'up' } },
+        });
     });
-  });
+  })
 });
